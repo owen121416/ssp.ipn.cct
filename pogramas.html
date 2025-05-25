@@ -10,20 +10,39 @@
 </head>
 <body>
   <nav>
-    <a href="index.html">Inicio</a>
-    <a href="login.html">Iniciar Sesión</a>
-    <a href="registro.html">Registro</a>
-    <a href="dashboard.html">Panel</a>
-    <a href="programas.html">Programas</a>
-    <a href="postulacion.html">Postulación</a>
-    <a href="subir-evidencias.html">Evidencias</a>
-    <a href="seguimiento.html">Seguimiento</a>
-    <a href="evaluacion.html">Evaluación</a>
-    <a href="gestion-documental.html">Documentos</a>
-    <a href="panel-asesor.html">Asesor</a>
-    <a href="panel-admin.html">Admin</a>
-    <a href="criticas.html">Críticas</a>
-    <a href="#" id="cerrarSesion">Cerrar Sesión</a>
+    <a href="index.html" class="nav-brand">SSP IPN</a>
+    <div class="hamburger" id="hamburger">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="nav-links" id="navLinks">
+      <div class="nav-group public-links">
+        <a href="index.html">Inicio</a>
+        <a href="login.html">Iniciar Sesión</a>
+        <a href="registro.html">Registro</a>
+      </div>
+
+      <div class="nav-group student-links" style="display:none;">
+        <a href="dashboard.html">Panel</a>
+        <a href="programas.html">Programas</a>
+        <a href="postulacion.html">Postulación</a>
+        <a href="subir-evidencias.html">Evidencias</a>
+        <a href="seguimiento.html">Seguimiento</a>
+        <a href="evaluacion.html">Evaluación</a>
+        <a href="gestion-documental.html">Documentos</a>
+        <a href="criticas.html">Críticas</a>
+      </div>
+      
+      <div class="nav-group admin-mentor-links" style="display:none;">
+        <a href="panel-asesor.html">Asesor</a>
+        <a href="panel-admin.html">Admin</a>
+      </div>
+
+      <div class="nav-group">
+        <a href="#" id="cerrarSesion" style="display:none;">Cerrar Sesión</a>
+      </div>
+    </div>
   </nav>
 
   <header>
@@ -99,19 +118,41 @@
   </section>
 
   <script>
-    // Protección de ruta
+    // Script para el menú hamburguesa
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      hamburger.classList.toggle('open'); // Añadir clase para transformar el ícono
+    });
+
+    // Protección de ruta y control de visibilidad de enlaces
     const usuarioActivo = JSON.parse(localStorage.getItem('usuarioActivo'));
+    const cerrarSesionBtn = document.getElementById('cerrarSesion');
+    const publicLinks = document.querySelector('.nav-group.public-links');
+    const studentLinks = document.querySelector('.nav-group.student-links');
+    const adminMentorLinks = document.querySelector('.nav-group.admin-mentor-links');
+
     if (!usuarioActivo) {
-      window.location.href = 'login.html';
+      window.location.href = 'login.html'; // Redirige si no hay sesión activa
+    } else {
+      // Mostrar enlaces de alumno si hay sesión
+      if (publicLinks) publicLinks.style.display = 'none';
+      if (studentLinks) studentLinks.style.display = 'flex';
+      // if (adminMentorLinks) adminMentorLinks.style.display = 'flex'; // Descomentar si implementas roles de admin/asesor
+      if (cerrarSesionBtn) cerrarSesionBtn.style.display = 'inline';
     }
 
     // Funcionalidad de cerrar sesión
-    document.getElementById('cerrarSesion').addEventListener('click', function(event) {
-      event.preventDefault();
-      localStorage.removeItem('usuarioActivo');
-      localStorage.removeItem('horasServicioSocial');
-      window.location.href = 'index.html';
-    });
+    if (cerrarSesionBtn) { // Asegurarse de que el botón existe
+        cerrarSesionBtn.addEventListener('click', function(event) {
+          event.preventDefault();
+          localStorage.removeItem('usuarioActivo');
+          localStorage.removeItem('horasServicioSocial');
+          window.location.href = 'index.html';
+        });
+    }
   </script>
 </body>
 </html>
